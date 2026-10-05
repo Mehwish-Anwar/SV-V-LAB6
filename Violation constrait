@@ -1,381 +1,250 @@
+# Task 3 — Identify Constraint Violations
+
 A **constraint violation** occurs when the actual behavior of the system does not follow a defined safety rule.
 
 Each violation includes:
 
-1. **Constraint**
-2. **Formal Expression**
-3. **Violation Scenario**
-4. **What Went Wrong**
-5. **How the Violation Is Detected**
-6. **Expected System Behavior**
+1. Constraint
+2. Formal Expression
+3. Violation Scenario
+4. What Went Wrong
+5. How the Violation Is Detected
+6. Expected System Behavior
 
 ---
 
 ## Violation 1 — Barrier Opens While Train Is Present
 
-### Constraint
+**Constraint:** C1 — The barrier must not open while a train is present at the crossing.
 
-**C1: Train_Present → ¬Barrier_Open**
+**Formal Expression:**  
+Train_Present → ¬Barrier_Open
 
-### Formal Expression
-
-**Train_Present → ¬Barrier_Open**
-
-### Violation Scenario
-
+**Violation Scenario:**
 - Train_Present = TRUE
 - Barrier_Open = TRUE
 
-### What Went Wrong?
+**What Went Wrong:**  
+The system detected that a train is present, but the barrier is open.
 
-The system has detected that a train is present at the crossing, but the barrier is open.
+**How the Violation Is Detected:**  
+The constraint requires the barrier to remain closed when a train is present. Therefore, Train_Present = TRUE and Barrier_Open = TRUE is a violation.
 
-### How Do We Know the Constraint Was Violated?
-
-The constraint requires the barrier to **not be open** when a train is present.
-
-Therefore:
-
-**Train_Present = TRUE AND Barrier_Open = TRUE**
-
-This is a direct violation of **C1**.
-
-### Expected System Behavior
-
+**Expected System Behavior:**  
 The barrier should remain closed, and the system should generate a safety warning if necessary.
 
 ---
 
 ## Violation 2 — Barrier Remains Open When Train Is Approaching
 
-### Constraint
+**Constraint:** C2 — The barrier must be closed before an approaching train reaches the crossing.
 
-**C2: Train_Approaching → Barrier_Closed**
+**Formal Expression:**  
+Train_Approaching → Barrier_Closed
 
-### Formal Expression
-
-**Train_Approaching → Barrier_Closed**
-
-### Violation Scenario
-
+**Violation Scenario:**
 - Train_Approaching = TRUE
 - Barrier_Closed = FALSE
 
-### What Went Wrong?
+**What Went Wrong:**  
+The system detected an approaching train, but the barrier is still open.
 
-The system has detected an approaching train, but the barrier is still open.
+**How the Violation Is Detected:**  
+The constraint requires the barrier to be closed when a train is approaching.
 
-### How Do We Know the Constraint Was Violated?
-
-The constraint requires the barrier to be closed when a train is approaching. Since the barrier is not closed, the requirement has been violated.
-
-### Expected System Behavior
-
-The system should close the barrier before the train reaches the crossing and activate the required warning signals.
+**Expected System Behavior:**  
+The system should close the barrier before the train reaches the crossing and activate the warning signals.
 
 ---
 
 ## Violation 3 — Warning Signals Are Not Activated
 
-### Constraint
+**Constraint:** C3 — Warning lights and audible alarms must be activated when a train is approaching.
 
-**C3: Train_Approaching → (Warning_Light_ON ∧ Alarm_ON)**
+**Formal Expression:**  
+Train_Approaching → (Warning_Light_ON ∧ Alarm_ON)
 
-### Formal Expression
-
-**Train_Approaching → (Warning_Light_ON ∧ Alarm_ON)**
-
-### Violation Scenario
-
+**Violation Scenario:**
 - Train_Approaching = TRUE
 - Warning_Light_ON = FALSE
 - Alarm_ON = FALSE
 
-### What Went Wrong?
+**What Went Wrong:**  
+A train is approaching, but the warning light and audible alarm are not active.
 
-The system knows that a train is approaching, but the warning light and audible alarm are not active.
+**How the Violation Is Detected:**  
+The constraint requires both the warning light and alarm to be ON when a train is approaching.
 
-### How Do We Know the Constraint Was Violated?
-
-The rule requires **both** the warning light and audible alarm to be ON.
-
-However:
-
-- Warning Light = OFF
-- Audible Alarm = OFF
-
-Therefore, the required condition is not satisfied.
-
-### Expected System Behavior
-
-The warning light and audible alarm should be activated immediately.
+**Expected System Behavior:**  
+The system should immediately activate the warning light and audible alarm.
 
 ---
 
 ## Violation 4 — Barrier Opens While Train Is Passing
 
-### Constraint
+**Constraint:** C4 — The barrier must remain closed while the train is passing through the crossing.
 
-**C4: Train_Passing → Barrier_Closed**
+**Formal Expression:**  
+Train_Passing → Barrier_Closed
 
-### Formal Expression
-
-**Train_Passing → Barrier_Closed**
-
-### Violation Scenario
-
+**Violation Scenario:**
 - Train_Passing = TRUE
 - Barrier_Closed = FALSE
 
-### What Went Wrong?
+**What Went Wrong:**  
+The train is passing through the crossing, but the barrier is open.
 
-The train is passing through the crossing, but the barrier has opened.
+**How the Violation Is Detected:**  
+The constraint requires the barrier to remain closed while the train is passing.
 
-### How Do We Know the Constraint Was Violated?
-
-The rule requires the barrier to remain closed while the train is passing.
-
-Therefore:
-
-**Train_Passing = TRUE AND Barrier_Closed = FALSE**
-
-represents a violation of **C4**.
-
-### Expected System Behavior
-
-The barrier must remain closed until the train completely clears the crossing.
+**Expected System Behavior:**  
+The barrier should remain closed until the train completely clears the crossing.
 
 ---
 
 ## Violation 5 — Barrier Opens Before Train Clears
 
-### Constraint
+**Constraint:** C5 — The barrier may open only after the system confirms that the train has completely cleared the crossing.
 
-**C5: Barrier_Open → Train_Cleared**
+**Formal Expression:**  
+Barrier_Open → Train_Cleared
 
-### Formal Expression
-
-**Barrier_Open → Train_Cleared**
-
-### Violation Scenario
-
+**Violation Scenario:**
 - Barrier_Open = TRUE
 - Train_Cleared = FALSE
 
-### What Went Wrong?
+**What Went Wrong:**  
+The barrier opened before the system confirmed that the train had completely cleared the crossing.
 
-The barrier has opened even though the system has not confirmed that the train has completely cleared the crossing.
-
-### How Do We Know the Constraint Was Violated?
-
+**How the Violation Is Detected:**  
 The barrier is allowed to open only after the train has been confirmed as cleared.
 
-Here:
-
-**Barrier_Open = TRUE**
-
-but:
-
-**Train_Cleared = FALSE**
-
-Therefore, the constraint has been violated.
-
-### Expected System Behavior
-
-The barrier should remain closed until the system confirms that the train has completely cleared the crossing.
+**Expected System Behavior:**  
+The system should keep the barrier closed until the train completely clears the crossing.
 
 ---
 
 ## Violation 6 — Traffic Signal Does Not Show STOP
 
-### Constraint
+**Constraint:** C6 — The road traffic signal must show STOP when a train is detected.
 
-**C6: Train_Detected → Traffic_Signal_STOP**
+**Formal Expression:**  
+Train_Detected → Traffic_Signal_STOP
 
-### Formal Expression
-
-**Train_Detected → Traffic_Signal_STOP**
-
-### Violation Scenario
-
+**Violation Scenario:**
 - Train_Detected = TRUE
 - Traffic_Signal_STOP = FALSE
 
-### What Went Wrong?
+**What Went Wrong:**  
+The system detected a train, but the traffic signal is not showing STOP.
 
-The system has detected a train, but the traffic signal is not showing **STOP**.
+**How the Violation Is Detected:**  
+The constraint requires the STOP signal whenever a train is detected.
 
-### How Do We Know the Constraint Was Violated?
-
-The constraint requires the STOP signal to be active whenever a train is detected.
-
-Since:
-
-**Train_Detected = TRUE**
-
-but:
-
-**Traffic_Signal_STOP = FALSE**
-
-the constraint has been violated.
-
-### Expected System Behavior
-
-The traffic signal should immediately change to **STOP**.
+**Expected System Behavior:**  
+The traffic signal should immediately change to STOP.
 
 ---
 
 ## Violation 7 — Automatic Barrier Opening After Sensor Failure
 
-### Constraint
+**Constraint:** C7 — The system must not automatically open the barrier if a train-detection sensor has failed.
 
-**C7: Sensor_Failure → ¬Automatic_Barrier_Open**
+**Formal Expression:**  
+Sensor_Failure → ¬Automatic_Barrier_Open
 
-### Formal Expression
-
-**Sensor_Failure → ¬Automatic_Barrier_Open**
-
-### Violation Scenario
-
+**Violation Scenario:**
 - Sensor_Failure = TRUE
 - Automatic_Barrier_Open = TRUE
 
-### What Went Wrong?
+**What Went Wrong:**  
+A sensor has failed, but the system automatically opens the barrier.
 
-A train-detection sensor has failed, but the system automatically opens the barrier.
+**How the Violation Is Detected:**  
+The constraint does not allow automatic barrier opening when a sensor has failed.
 
-### How Do We Know the Constraint Was Violated?
-
-The rule states that automatic barrier opening is not allowed when a sensor has failed.
-
-Therefore:
-
-**Sensor_Failure = TRUE AND Automatic_Barrier_Open = TRUE**
-
-represents a violation of **C7**.
-
-### Expected System Behavior
-
-The system should keep the barrier closed and notify the safety-monitoring unit or control center.
+**Expected System Behavior:**  
+The barrier should remain closed, and the system should report the sensor failure to the safety-monitoring unit or control center.
 
 ---
 
 ## Violation 8 — Barrier Failure Without Emergency Warning
 
-### Constraint
+**Constraint:** C8 — If the barrier fails to close, the system must activate an emergency warning.
 
-**C8: Barrier_Failure → Emergency_Warning_ON**
+**Formal Expression:**  
+Barrier_Failure → Emergency_Warning_ON
 
-### Formal Expression
-
-**Barrier_Failure → Emergency_Warning_ON**
-
-### Violation Scenario
-
+**Violation Scenario:**
 - Barrier_Failure = TRUE
 - Emergency_Warning_ON = FALSE
 
-### What Went Wrong?
+**What Went Wrong:**  
+The barrier has failed, but the emergency warning is not active.
 
-The barrier has failed to close, but the system has not activated the emergency warning.
-
-### How Do We Know the Constraint Was Violated?
-
+**How the Violation Is Detected:**  
 The constraint requires an emergency warning whenever a barrier failure occurs.
 
-Since the barrier has failed but the emergency warning is OFF, the constraint is violated.
-
-### Expected System Behavior
-
-The system should activate an emergency warning and inform the control center.
+**Expected System Behavior:**  
+The system should activate the emergency warning and inform the control center.
 
 ---
 
 ## Violation 9 — Communication Lost but System Is Not in Safe State
 
-### Constraint
+**Constraint:** C9 — If communication with the control center is lost, the system must enter a safe state.
 
-**C9: Communication_Lost → Safe_State**
+**Formal Expression:**  
+Communication_Lost → Safe_State
 
-### Formal Expression
-
-**Communication_Lost → Safe_State**
-
-### Violation Scenario
-
+**Violation Scenario:**
 - Communication_Lost = TRUE
 - Safe_State = FALSE
 
-### What Went Wrong?
+**What Went Wrong:**  
+Communication with the control center is lost, but the crossing is not in a safe state.
 
-Communication with the control center has been lost, but the crossing has not entered the required safe state.
+**How the Violation Is Detected:**  
+The constraint requires the system to enter a safe state when communication is lost.
 
-### How Do We Know the Constraint Was Violated?
-
-The rule requires the system to enter a safe state whenever communication is lost.
-
-Because:
-
-**Communication_Lost = TRUE**
-
-and:
-
-**Safe_State = FALSE**
-
-the constraint is violated.
-
-### Expected System Behavior
-
-The crossing should enter a predefined safe condition and prevent unsafe barrier operation.
+**Expected System Behavior:**  
+The system should enter the predefined safe state and prevent unsafe barrier operation.
 
 ---
 
 ## Violation 10 — Barrier Opens with Incorrect Sensor Reading
 
-### Constraint
+**Constraint:** C10 — The system must not open the barrier when sensor readings are incorrect or conflicting.
 
-**C10: Incorrect_Sensor_Reading → ¬Barrier_Open**
+**Formal Expression:**  
+Incorrect_Sensor_Reading → ¬Barrier_Open
 
-### Formal Expression
-
-**Incorrect_Sensor_Reading → ¬Barrier_Open**
-
-### Violation Scenario
-
+**Violation Scenario:**
 - Incorrect_Sensor_Reading = TRUE
 - Barrier_Open = TRUE
 
-### What Went Wrong?
+**What Went Wrong:**  
+The sensors are giving incorrect or conflicting information, but the barrier has opened.
 
-The sensors are giving incorrect or conflicting information, but the system has opened the barrier.
+**How the Violation Is Detected:**  
+The constraint requires the barrier to remain closed when sensor readings are incorrect.
 
-### How Do We Know the Constraint Was Violated?
-
-The constraint clearly states that the barrier must not open when sensor readings are incorrect.
-
-Therefore:
-
-**Incorrect_Sensor_Reading = TRUE AND Barrier_Open = TRUE**
-
-is a violation of **C10**.
-
-### Expected System Behavior
-
-The barrier should remain closed until the sensor information is verified and the crossing is confirmed safe.
+**Expected System Behavior:**  
+The system should keep the barrier closed until the sensor information is verified and the crossing is confirmed safe.
 
 ---
 
-# Summary of Constraint Violations
+## Task 3 Summary
 
-| **Violation** | **Constraint** | **Violation Condition** | **Expected Behavior** |
+| Violation | Constraint | Violation Condition | Expected Behavior |
 |---|---|---|---|
-| **V1** | C1 | Train is present but barrier is open. | Keep barrier closed. |
-| **V2** | C2 | Train is approaching but barrier is not closed. | Close the barrier. |
-| **V3** | C3 | Train is approaching but warning signals are OFF. | Activate lights and alarm. |
-| **V4** | C4 | Train is passing but barrier is open. | Keep barrier closed. |
-| **V5** | C5 | Barrier is open but train is not confirmed clear. | Keep barrier closed. |
-| **V6** | C6 | Train is detected but STOP signal is OFF. | Activate STOP signal. |
-| **V7** | C7 | Sensor has failed but barrier opens automatically. | Keep barrier closed and report failure. |
-| **V8** | C8 | Barrier fails but emergency warning is OFF. | Activate emergency warning. |
-| **V9** | C9 | Communication is lost but system is not safe. | Enter safe state. |
-| **V10** | C10 | Sensor reading is incorrect but barrier opens. | Keep barrier closed until verified. |
+| V1 | C1 | Train is present but barrier is open. | Keep barrier closed. |
+| V2 | C2 | Train is approaching but barrier is not closed. | Close the barrier. |
+| V3 | C3 | Train is approaching but warning signals are OFF. | Activate lights and alarm. |
+| V4 | C4 | Train is passing but barrier is open. | Keep barrier closed. |
+| V5 | C5 | Barrier is open but train is not confirmed clear. | Keep barrier closed. |
+| V6 | C6 | Train is detected but STOP signal is OFF. | Activate STOP signal. |
+| V7 | C7 | Sensor has failed but barrier opens automatically. | Keep barrier closed and report failure. |
+| V8 | C8 | Barrier fails but emergency warning is OFF. | Activate emergency warning. |
+| V9 | C9 | Communication is lost but system is not safe. | Enter safe state. |
+| V10 | C10 | Sensor reading is incorrect but barrier opens. | Keep barrier closed until verified. |
